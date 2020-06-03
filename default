@@ -55,6 +55,7 @@ server {
 
 	location = /favicon.ico {log_not_found off; access_log off; }
 	location = /robots.txt {log_not_found off; access_log off; allow all; }
+	
 	location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
 	expires max;
 	log_not_found off;
@@ -77,6 +78,12 @@ server {
 		fastcgi_cache_valid 200 60m;
 	}
 
+
+	if ($request_method = POST) {set $no_cache 1; }
+	if ($query_string != "") {set $no_cache 1; }
+	if ($request_uri ~* "/wp-admin") {set $no_cache 1; }
+	
+	
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
 	#
